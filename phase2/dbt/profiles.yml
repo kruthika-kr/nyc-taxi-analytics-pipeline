@@ -3,9 +3,9 @@ nyc_taxi_profile:
   outputs:
     dev:
       type: snowflake
-      account: axsexmz-of83030
-      user: KRUTHIKA
-      password: xf7LQN5HbQbEDdD
+      account: "{{ env_var('SNOWFLAKE_ACCOUNT') }}"
+      user: "{{ env_var('SNOWFLAKE_USER') }}"
+      password: "{{ env_var('SNOWFLAKE_PASSWORD') }}"
       role: ACCOUNTADMIN
       warehouse: COMPUTE_WH
       database: NYC_TAXI_DB
