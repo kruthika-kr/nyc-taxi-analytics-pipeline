@@ -1,0 +1,7 @@
+prefect
+pandas
+pyarrow
+dbt-core
+dbt-bigquery
+google-cloud-bigquery
+google-cloud-storage
