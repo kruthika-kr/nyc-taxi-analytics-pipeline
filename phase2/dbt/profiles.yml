@@ -1,0 +1,14 @@
+nyc_taxi_profile:
+  target: dev
+  outputs:
+    dev:
+      type: snowflake
+      account: axsexmz-of83030
+      user: KRUTHIKA
+      password: xf7LQN5HbQbEDdD
+      role: ACCOUNTADMIN
+      warehouse: COMPUTE_WH
+      database: NYC_TAXI_DB
+      schema: ANALYTICS
+      threads: 4
+      client_session_keep_alive: false
