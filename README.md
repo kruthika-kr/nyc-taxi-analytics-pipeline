@@ -1,336 +1,179 @@
-# 🚖 NYC Taxi Analytics Pipeline
+Project Overview
 
-## Overview
+This project demonstrates an end-to-end cloud data engineering pipeline using NYC Yellow Taxi trip data. The goal was to transform a traditional local ETL workflow into a modern cloud-based analytics platform using Snowflake, dbt, and Power BI.
 
-This project implements an end-to-end ETL (Extract, Transform, Load) and analytics pipeline using the NYC Yellow Taxi dataset.
+The pipeline processes over 9.5 million NYC taxi trip records and generates analytics-ready datasets for business intelligence reporting.
 
-The pipeline extracts raw taxi trip data stored in Parquet format, performs data cleaning and transformation using Python and Pandas, loads the processed data into Microsoft SQL Server, and generates business insights through SQL analytics queries and views.
-
-The project processes over **9.5 million taxi trip records**, demonstrating practical data engineering skills including data ingestion, transformation, storage, and analytical reporting.
-
----
-
-## Project Architecture
-
-```text
+Architecture
 NYC Taxi Parquet Files
           │
           ▼
-Python + Pandas
-(Data Cleaning & Validation)
+      Python
           │
           ▼
-SQLAlchemy
+     Snowflake
+      RAW Layer
+ (9,554,778 Rows)
           │
           ▼
-SQL Server
-(raw_yellow_taxi_trips)
+         dbt
+ Analytics Layer
           │
           ▼
-SQL Views & Analytics Queries
-          │
-          ▼
-Business Insights
-```
+      Power BI
+      Dashboard
+Dataset
 
----
+Source: NYC Taxi & Limousine Commission (TLC)
 
-## Dataset
+Files Processed:
 
-### Source
-
-NYC Taxi & Limousine Commission (TLC)
-
-### Files Used
-
-```text
 yellow_tripdata_2024-01.parquet
 yellow_tripdata_2024-02.parquet
 yellow_tripdata_2024-03.parquet
-```
 
-### Records Processed
+Total Records Loaded:
 
-```text
-9,554,778 rows
-```
-
----
-
-## Technologies Used
-
-### Programming Languages
-
-- Python
-- SQL
-
-### Python Libraries
-
-- Pandas
-- SQLAlchemy
-- PyODBC
-
-### Database
-
-- Microsoft SQL Server Express 2022
-
-### File Format
-
-- Apache Parquet
-
-### Development Tools
-
-- Visual Studio Code
-- SQL Server Management Studio (SSMS)
-- Git
-- GitHub
-
----
-
-## ETL Pipeline
-
-### Extract
-
-Raw NYC Yellow Taxi trip data is extracted from Parquet files using Pandas.
-
-### Transform
-
-Data transformation includes:
-
-- Data type standardization
-- Datetime conversion
-- Null value handling
-- Basic data quality checks
-- Record validation
-
-### Load
-
-Cleaned records are loaded into SQL Server.
-
-Target table:
-
-```sql
-raw_yellow_taxi_trips
-```
-
-Total records loaded:
-
-```text
 9,554,778
-```
+Technology Stack
+Data Engineering
+Python
+Pandas
+PyArrow
+Snowflake
+dbt
+Analytics & Visualization
+Power BI
+Version Control
+Git
+GitHub
+Configuration & Security
+Environment Variables
+.env
+python-dotenv
+Snowflake Setup
 
----
+Created:
 
-## Database Design
+Database
+NYC_TAXI_DB
+Schemas
+RAW
+ANALYTICS
+Warehouse
+COMPUTE_WH
+Data Loading
 
-### Raw Data Layer
+Taxi data was loaded from Parquet files into:
 
-```sql
-raw_yellow_taxi_trips
-```
+NYC_TAXI_DB.RAW.RAW_YELLOW_TAXI_TRIPS
+Final Row Count
+SELECT COUNT(*)
+FROM NYC_TAXI_DB.RAW.RAW_YELLOW_TAXI_TRIPS;
 
-Stores detailed taxi trip information including:
+Result:
 
-- Pickup time
-- Dropoff time
-- Passenger count
-- Trip distance
-- Fare amount
-- Payment type
-- Pickup location
-- Dropoff location
+9,554,778 Rows
+dbt Transformation Layer
+Source Configuration
 
----
+dbt sources were configured against the Snowflake RAW schema.
 
-## Analytics Views
+Model
 
-### 1. Daily Trip Summary View
+Created:
 
-```sql
-vw_trip_summary
-```
+DAILY_TAXI_METRICS
 
-Provides:
+Metrics generated:
 
-- Daily trip counts
-- Average trip distance
-- Average fare amount
-- Daily revenue
-
----
-
-### 2. Payment Analysis View
-
-```sql
-vw_payment_analysis
-```
-
-Provides:
-
-- Trips by payment type
-- Revenue by payment type
-- Average fare by payment type
-
----
-
-## Business Analytics
-
-### Peak Pickup Hours Analysis
-
-Query used:
-
-```sql
+Trip Date
+Total Trips
+Average Trip Distance
+Average Fare
+Total Revenue
+Example Transformation
 SELECT
-    DATEPART(HOUR, tpep_pickup_datetime) AS pickup_hour,
-    COUNT(*) AS total_trips
-FROM dbo.raw_yellow_taxi_trips
-WHERE YEAR(tpep_pickup_datetime) = 2024
-GROUP BY DATEPART(HOUR, tpep_pickup_datetime)
-ORDER BY total_trips DESC;
-```
+    CAST(TPEP_PICKUP_DATETIME AS DATE) AS TRIP_DATE,
+    COUNT(*) AS TOTAL_TRIPS,
+    ROUND(AVG(TRIP_DISTANCE), 2) AS AVG_TRIP_DISTANCE,
+    ROUND(AVG(TOTAL_AMOUNT), 2) AS AVG_FARE,
+    ROUND(SUM(TOTAL_AMOUNT), 2) AS TOTAL_REVENUE
+FROM RAW_YELLOW_TAXI_TRIPS
+GROUP BY CAST(TPEP_PICKUP_DATETIME AS DATE)
+Power BI Dashboard
 
-### Results
+The Power BI dashboard provides:
 
-| Pickup Hour | Trips |
-|------------|--------:|
-| 18 (6 PM) | 690,932 |
-| 17 (5 PM) | 653,781 |
-| 19 (7 PM) | 614,084 |
+KPI Cards
+Total Trips
+Total Revenue
+Average Fare
+Average Trip Distance
+Trend Analysis
+Daily Revenue Trend
+Daily Trip Trend
+Average Fare Trend
+Average Trip Distance Trend
+Dashboard Preview
+Power BI Dashboard
 
-### Insight
 
-Taxi demand peaks between **5 PM and 7 PM**, with **6 PM** being the busiest hour.
 
-This pattern reflects evening commuter traffic across New York City.
 
----
+Snowflake Row Count
 
-## Top Revenue Pickup Zones
 
-Query used:
 
-```sql
-SELECT TOP 10
-    PULocationID,
-    COUNT(*) AS total_trips,
-    SUM(total_amount) AS total_revenue
-FROM dbo.raw_yellow_taxi_trips
-WHERE YEAR(tpep_pickup_datetime)=2024
-GROUP BY PULocationID
-ORDER BY total_revenue DESC;
-```
 
-### Results
+dbt Successful Run
 
-| Pickup Zone | Revenue |
-|------------|---------:|
-| 132 | $33.1M |
-| 138 | $18.7M |
-| 161 | $10.8M |
 
-### Insight
 
-Pickup Zone **132** generated more than **$33 million** in revenue, making it the highest-performing pickup location in the dataset.
 
----
+Security Improvements
 
-## Payment Type Analysis
+Removed hardcoded credentials from source code.
 
-Query used:
+Implemented:
 
-```sql
-SELECT
-    payment_type,
-    COUNT(*) AS trips,
-    AVG(total_amount) AS avg_fare,
-    SUM(total_amount) AS revenue
-FROM dbo.raw_yellow_taxi_trips
-WHERE YEAR(tpep_pickup_datetime)=2024
-GROUP BY payment_type;
-```
+Environment Variables
+.env configuration
+dbt env_var() integration
+GitHub secret cleanup
 
-### Results
+Example:
 
-| Payment Type | Trips | Revenue |
-|-------------|--------:|---------:|
-| 2 | 1,330,099 | $30.4M |
-| 1 | 725,814 | $20.7M |
-| 0 | 751,962 | $18.1M |
+user=os.getenv("SNOWFLAKE_USER")
+password=os.getenv("SNOWFLAKE_PASSWORD")
+account=os.getenv("SNOWFLAKE_ACCOUNT")
+Data Recovery Using Snowflake Time Travel
 
-### Insight
+During development, an accidental:
 
-Payment Type **2** generated the highest overall revenue among analyzed trips.
+TRUNCATE TABLE RAW_YELLOW_TAXI_TRIPS;
 
----
+removed all loaded data.
 
-## Project Structure
+The table was successfully restored using Snowflake Time Travel and table cloning, recovering:
 
-```text
-nyc-taxi-analytics-pipeline/
-│
-├── data/
-│
-├── src/
-│   └── ingestion/
-│       └── load_raw_data.py
-│
-├── sql/
-│   ├── analytics_queries.sql
-│   ├── create_views.sql
-│   └── create_summary_tables.sql
-│
-├── README.md
-├── requirements.txt
-└── .gitignore
-```
+9,554,778 Records
 
----
+This demonstrated real-world cloud data recovery and operational troubleshooting skills.
 
-## Key Skills Demonstrated
-
-### Data Engineering
-
-- ETL Pipeline Development
-- Data Ingestion
-- Data Transformation
-- Data Validation
-- Large Dataset Processing
-
-### Database Engineering
-
-- SQL Server Administration
-- Data Modeling
-- SQL Query Optimization
-- View Creation
-- Aggregation Analysis
-
-### Analytics
-
-- Revenue Analysis
-- Operational Metrics
-- Trend Analysis
-- Business Intelligence Reporting
-
----
-
-## Future Enhancements
-
-Planned improvements include:
-
-- Automated workflow orchestration using Prefect
-- Cloud data warehouse integration using BigQuery
-- dbt transformation layer
-- Interactive dashboard using Power BI or Streamlit
-- Docker containerization
-- CI/CD using GitHub Actions
-
----
-
-## Author
-
-**Kruthika Kadurhalli Raghu**
-
-Graduate Student – Data Science  
-Arizona State University
-
----
+Key Results
+Metric	Value
+Records Processed	9,554,778
+Months Loaded	3
+Cloud Warehouse	Snowflake
+Transformation Tool	dbt
+Dashboard Tool	Power BI
+Analytics Rows Generated	96
+Future Improvements
+Prefect Workflow Orchestration
+Automated Data Refresh
+Docker Containerization
+GitHub Actions CI/CD
+Incremental dbt Models
+Snowflake Stages & COPY INTO
+Data Quality Tests
