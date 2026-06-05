@@ -4,9 +4,48 @@
 
 This project demonstrates an end-to-end cloud data engineering pipeline built using NYC Yellow Taxi trip data.
 
-The objective was to modernize a traditional local ETL workflow into a cloud-based analytics platform using Snowflake, dbt, and Power BI.
+The project evolved from a traditional local ETL pipeline built with Python and SQL Server into a modern cloud analytics platform using Snowflake, dbt, and Power BI.
 
-### Pipeline Architecture
+### Project Evolution
+
+#### Initial Version
+
+The project originally processed NYC Taxi Parquet files using:
+
+* Python
+* Pandas
+* SQLAlchemy
+* SQL Server Express
+
+Pipeline:
+
+```text
+Parquet Files
+      ↓
+Python ETL
+      ↓
+SQL Server
+      ↓
+Analytics Queries
+```
+
+#### Current Cloud Version
+
+The pipeline was redesigned using modern cloud data engineering tools:
+
+```text
+Parquet Files
+      ↓
+Snowflake RAW Layer
+      ↓
+dbt Analytics Layer
+      ↓
+Power BI Dashboard
+```
+
+---
+
+# Architecture
 
 ```text
 NYC Taxi Parquet Files
@@ -58,7 +97,7 @@ Total Records Loaded:
 * Snowflake
 * dbt
 
-### Analytics
+### Analytics & Visualization
 
 * Power BI
 
@@ -75,7 +114,9 @@ Total Records Loaded:
 
 ---
 
-# Snowflake Setup
+# Snowflake Data Warehouse
+
+Created:
 
 ### Database
 
@@ -100,7 +141,7 @@ COMPUTE_WH
 
 # Data Loading
 
-Loaded Parquet files into:
+Parquet files were loaded into:
 
 ```sql
 NYC_TAXI_DB.RAW.RAW_YELLOW_TAXI_TRIPS
@@ -129,7 +170,7 @@ Created analytics model:
 DAILY_TAXI_METRICS
 ```
 
-Metrics generated:
+Generated metrics:
 
 * Trip Date
 * Total Trips
@@ -154,7 +195,7 @@ GROUP BY CAST(TPEP_PICKUP_DATETIME AS DATE)
 
 # Power BI Dashboard
 
-The dashboard includes:
+The Power BI dashboard provides:
 
 ### KPI Metrics
 
@@ -190,7 +231,12 @@ The dashboard includes:
 
 # Security Improvements
 
-Removed hardcoded Snowflake credentials and implemented environment variable configuration.
+Implemented:
+
+* Environment Variables
+* .env Configuration
+* python-dotenv
+* dbt env_var()
 
 Example:
 
@@ -200,12 +246,7 @@ password=os.getenv("SNOWFLAKE_PASSWORD")
 account=os.getenv("SNOWFLAKE_ACCOUNT")
 ```
 
-Implemented:
-
-* .env configuration
-* python-dotenv
-* dbt env_var()
-* GitHub secret cleanup
+Hardcoded credentials were removed from source code and GitHub.
 
 ---
 
@@ -225,7 +266,7 @@ The dataset was successfully recovered using Snowflake Time Travel and table clo
 9,554,778 Records
 ```
 
-This demonstrates cloud data recovery and operational troubleshooting skills.
+This demonstrated cloud data recovery and operational troubleshooting skills.
 
 ---
 
