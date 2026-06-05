@@ -1,14 +1,16 @@
-# 🚕 NYC Taxi Analytics Pipeline (Cloud Data Engineering Project)
+# 🚕 NYC Taxi Analytics Pipeline
 
 ## Overview
 
 This project demonstrates an end-to-end cloud data engineering pipeline built using NYC Yellow Taxi trip data.
 
-The project evolved from a traditional local ETL pipeline built with Python and SQL Server into a modern cloud analytics platform using Snowflake, dbt, and Power BI.
+The project evolved from a traditional local ETL workflow into a modern cloud-based analytics platform using Snowflake, dbt, Prefect, and Power BI.
 
-### Project Evolution
+---
 
-#### Initial Version
+# Project Evolution
+
+### Initial Pipeline
 
 The project originally processed NYC Taxi Parquet files using:
 
@@ -29,18 +31,20 @@ SQL Server
 Analytics Queries
 ```
 
-#### Current Cloud Version
+### Modern Cloud Pipeline
 
-The pipeline was redesigned using modern cloud data engineering tools:
+The architecture was redesigned using cloud-native data engineering tools:
 
 ```text
 Parquet Files
       ↓
-Snowflake RAW Layer
+Prefect
       ↓
-dbt Analytics Layer
+Snowflake
       ↓
-Power BI Dashboard
+dbt
+      ↓
+Power BI
 ```
 
 ---
@@ -51,7 +55,7 @@ Power BI Dashboard
 NYC Taxi Parquet Files
           │
           ▼
-       Python
+       Prefect
           │
           ▼
       Snowflake
@@ -61,6 +65,7 @@ NYC Taxi Parquet Files
           ▼
          dbt
  Analytics Layer
+      (96 Rows)
           │
           ▼
       Power BI
@@ -79,7 +84,7 @@ Files Processed:
 * yellow_tripdata_2024-02.parquet
 * yellow_tripdata_2024-03.parquet
 
-Total Records Loaded:
+Total Records Processed:
 
 ```text
 9,554,778 Rows
@@ -94,6 +99,7 @@ Total Records Loaded:
 * Python
 * Pandas
 * PyArrow
+* Prefect
 * Snowflake
 * dbt
 
@@ -115,8 +121,6 @@ Total Records Loaded:
 ---
 
 # Snowflake Data Warehouse
-
-Created:
 
 ### Database
 
@@ -141,7 +145,7 @@ COMPUTE_WH
 
 # Data Loading
 
-Parquet files were loaded into:
+Parquet files are loaded into:
 
 ```sql
 NYC_TAXI_DB.RAW.RAW_YELLOW_TAXI_TRIPS
@@ -162,6 +166,32 @@ Result:
 
 ---
 
+# Prefect Orchestration
+
+A Prefect flow was implemented to automate:
+
+1. Snowflake table refresh
+2. January data load
+3. February data load
+4. March data load
+5. dbt model execution
+
+Pipeline Flow:
+
+```text
+Load January
+      ↓
+Load February
+      ↓
+Load March
+      ↓
+Run dbt
+      ↓
+Refresh Analytics Layer
+```
+
+---
+
 # dbt Analytics Layer
 
 Created analytics model:
@@ -170,7 +200,7 @@ Created analytics model:
 DAILY_TAXI_METRICS
 ```
 
-Generated metrics:
+Metrics generated:
 
 * Trip Date
 * Total Trips
@@ -219,24 +249,19 @@ The Power BI dashboard provides:
 
 ![Power BI Dashboard](phase2/dashboard/screenshots/dashboard.png)
 
-## Snowflake Row Count
+## Snowflake Validation
 
-![Snowflake Row Count](phase2/dashboard/screenshots/snowflake_row_count.png)
+![Snowflake Validation](phase2/dashboard/screenshots/snowflake_row_count.png)
 
 ## dbt Successful Run
 
-![dbt Run](phase2/dashboard/screenshots/dbt_success.png)
+![dbt Successful Run](phase2/dashboard/screenshots/dbt_success.png)
 
 ---
 
 # Security Improvements
 
-Implemented:
-
-* Environment Variables
-* .env Configuration
-* python-dotenv
-* dbt env_var()
+Removed hardcoded credentials and implemented environment-based configuration.
 
 Example:
 
@@ -246,7 +271,12 @@ password=os.getenv("SNOWFLAKE_PASSWORD")
 account=os.getenv("SNOWFLAKE_ACCOUNT")
 ```
 
-Hardcoded credentials were removed from source code and GitHub.
+Implemented:
+
+* .env configuration
+* python-dotenv
+* dbt env_var()
+* GitHub secret cleanup
 
 ---
 
@@ -277,20 +307,32 @@ This demonstrated cloud data recovery and operational troubleshooting skills.
 | Records Processed        | 9,554,778 |
 | Months Loaded            | 3         |
 | Cloud Warehouse          | Snowflake |
+| Orchestration Tool       | Prefect   |
 | Transformation Tool      | dbt       |
 | Dashboard Tool           | Power BI  |
 | Analytics Rows Generated | 96        |
 
 ---
 
+# Resume Impact
+
+Key achievements:
+
+* Built an end-to-end cloud data engineering pipeline processing 9.55M+ NYC Taxi records.
+* Automated ingestion and transformation workflows using Prefect and dbt.
+* Developed Snowflake RAW and ANALYTICS layers.
+* Built Power BI dashboards for trip volume, revenue, fare, and distance analytics.
+* Recovered a production dataset using Snowflake Time Travel after accidental data loss.
+
+---
+
 # Future Enhancements
 
-* Prefect Workflow Orchestration
-* Automated Data Refresh
 * Docker Containerization
 * GitHub Actions CI/CD
 * Incremental dbt Models
 * Data Quality Testing
+* Automated Scheduling
 
 ---
 
@@ -300,5 +342,8 @@ This demonstrated cloud data recovery and operational troubleshooting skills.
 
 Graduate Student – Data Science
 Arizona State University
+
+GitHub: https://github.com/kruthika-kr
+
 
 GitHub: https://github.com/kruthika-kr
