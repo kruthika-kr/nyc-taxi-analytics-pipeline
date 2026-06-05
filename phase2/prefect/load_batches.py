@@ -6,7 +6,7 @@ from snowflake.connector.pandas_tools import write_pandas
 
 load_dotenv()
 
-FILE_PATH = r"data\raw\yellow_tripdata_2024-01.parquet"
+FILE_PATH = r"data\raw\yellow_tripdata_2024-03.parquet"
 BATCH_SIZE = 5000
 
 parquet_file = pq.ParquetFile(FILE_PATH)
