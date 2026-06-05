@@ -1,0 +1,53 @@
+Changes & Additions
+Python proficiency: Clarified that candidates should be capable of writing code independently; guided independence is acceptable, but the ability to write scripts individually is preferred.
+ML/NLP/Data Engineering exposure: Specified that meaningful exposure includes coursework, academic projects, work experience, freelance work, or research — any one of these qualifies.
+PII/Anonymisation experience: Updated to reflect that prior hands-on experience with anonymisation techniques is preferred, rather than purely on-the-job training from scratch.
+University/location requirement: Clarified that "equivalent" schools are defined by proximity to the Los Angeles office (to support five-days-a-week on-site attendance) or Ivy League calibre — not solely USC/UCLA.
+Tooling and scripts: Clarified that the expected scope is small automation scripts, with the option to leverage AI tools, focused on pipeline efficiency.
+Supervision and autonomy: Added detail that the first couple of weeks involve close guidance from the Head of Engineering, followed by increasing autonomy thereafter.
+Data and Engineering Intern
+Meridian Intelligence · Engineering · Summer 2026
+
+LOCATION Los Angeles, CA (on-site, five days per week)
+
+DURATION May to August 2026
+
+COMPENSATION Paid
+
+About Meridian Intelligence
+Meridian Intelligence is powering the next generation of AI by bridging the gap between how the world works and what AI systems understand about it. We are early, moving fast, and building a small team of people who own outcomes rather than tasks.
+
+The Internship
+This is not a research internship. From day one you will work on real data moving through Meridian's pipeline. Our pipeline ingests raw operational data from companies globally, transforms it through a multi-stage process, and delivers privacy-safe, quality-scored training assets to frontier AI labs. You will be embedded in that process and contribute to work that ships.
+
+For the first couple of weeks, you will work closely under the guidance of the Head of Engineering. As you become familiar with the pipeline and our standards, you will be given increasing autonomy to operate independently.
+
+What You Will Work On
+DATA PIPELINE
+
+Ingest, clean, and structure raw operational datasets across multiple formats — Slack exports, Asana archives, financial records, codebase repositories.
+Support development and testing of data quality scoring models that assess the training value of each dataset.
+Run exploratory analysis on incoming datasets to surface patterns, anomalies, and coverage gaps before they reach the pipeline.
+PRIVACY AND PROCESSING
+
+Apply PII detection and removal techniques to ensure all data meets Meridian's privacy standards before delivery.
+Assist in implementing and testing anonymisation workflows and privacy-preserving processing techniques.
+Document data provenance and processing steps for every dataset that moves through the pipeline.
+RESEARCH AND TOOLING
+
+Research emerging techniques in data quality assessment and training data curation.
+Build small automation scripts and lightweight tools — including leveraging AI tools where appropriate — that improve pipeline efficiency and reduce manual effort.
+Support the Head of Engineering on technical assessments of supplier data.
+What We Are Looking For
+Currently enrolled in an undergraduate or graduate program in computer science, data science, statistics, or a related field. We are primarily looking for candidates from USC, UCLA, Ivy League institutions, or schools located within commuting distance of Los Angeles, as this role requires five days per week on-site.
+Proficient in Python. You should be capable of writing clean, documented scripts independently. Guided independence is acceptable; the ability to work individually is preferred. Comfortable with Pandas, NumPy, and at least one visualisation library.
+Meaningful exposure to ML concepts, NLP, or data engineering — demonstrated through coursework, academic projects, work experience, freelance work, or research. Expert-level knowledge is not required, but concrete exposure in at least one of these areas is expected.
+Prior hands-on experience with PII detection, anonymisation techniques, or privacy-preserving data processing is preferred.
+You write clean, documented code and care about reproducibility.
+You ask good questions and are not afraid to say when something does not make sense.
+What You Will Take Away
+Hands-on experience building a data pipeline that ships to real buyers. A working understanding of how frontier AI labs source and evaluate training data. And if you are exceptional, a conversation about what comes next.
+
+At Meridian, interns do real work. If that is what you are looking for, this is the right place.
+
+Send a short note to careers@withmeridian.ai with Data and Engineering Intern in the subject line. No template. Just tell us who you are and why this.
