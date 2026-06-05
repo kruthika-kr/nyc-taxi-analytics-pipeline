@@ -1,19 +1,23 @@
-Project Overview
+# 🚕 NYC Taxi Analytics Pipeline (Cloud Data Engineering Project)
 
-This project demonstrates an end-to-end cloud data engineering pipeline using NYC Yellow Taxi trip data. The goal was to transform a traditional local ETL workflow into a modern cloud-based analytics platform using Snowflake, dbt, and Power BI.
+## Overview
 
-The pipeline processes over 9.5 million NYC taxi trip records and generates analytics-ready datasets for business intelligence reporting.
+This project demonstrates an end-to-end cloud data engineering pipeline built using NYC Yellow Taxi trip data.
 
-Architecture
+The objective was to modernize a traditional local ETL workflow into a cloud-based analytics platform using Snowflake, dbt, and Power BI.
+
+### Pipeline Architecture
+
+```text
 NYC Taxi Parquet Files
           │
           ▼
-      Python
+       Python
           │
           ▼
-     Snowflake
+      Snowflake
       RAW Layer
- (9,554,778 Rows)
+   (9.55M Records)
           │
           ▼
          dbt
@@ -22,77 +26,120 @@ NYC Taxi Parquet Files
           ▼
       Power BI
       Dashboard
-Dataset
+```
+
+---
+
+# Dataset
 
 Source: NYC Taxi & Limousine Commission (TLC)
 
 Files Processed:
 
-yellow_tripdata_2024-01.parquet
-yellow_tripdata_2024-02.parquet
-yellow_tripdata_2024-03.parquet
+* yellow_tripdata_2024-01.parquet
+* yellow_tripdata_2024-02.parquet
+* yellow_tripdata_2024-03.parquet
 
 Total Records Loaded:
 
-9,554,778
-Technology Stack
-Data Engineering
-Python
-Pandas
-PyArrow
-Snowflake
-dbt
-Analytics & Visualization
-Power BI
-Version Control
-Git
-GitHub
-Configuration & Security
-Environment Variables
-.env
-python-dotenv
-Snowflake Setup
+```text
+9,554,778 Rows
+```
 
-Created:
+---
 
-Database
+# Technology Stack
+
+### Data Engineering
+
+* Python
+* Pandas
+* PyArrow
+* Snowflake
+* dbt
+
+### Analytics
+
+* Power BI
+
+### Version Control
+
+* Git
+* GitHub
+
+### Security
+
+* Environment Variables
+* python-dotenv
+* dbt env_var()
+
+---
+
+# Snowflake Setup
+
+### Database
+
+```sql
 NYC_TAXI_DB
-Schemas
+```
+
+### Schemas
+
+```sql
 RAW
 ANALYTICS
-Warehouse
+```
+
+### Warehouse
+
+```sql
 COMPUTE_WH
-Data Loading
+```
 
-Taxi data was loaded from Parquet files into:
+---
 
+# Data Loading
+
+Loaded Parquet files into:
+
+```sql
 NYC_TAXI_DB.RAW.RAW_YELLOW_TAXI_TRIPS
-Final Row Count
+```
+
+Final Row Count:
+
+```sql
 SELECT COUNT(*)
 FROM NYC_TAXI_DB.RAW.RAW_YELLOW_TAXI_TRIPS;
+```
 
 Result:
 
+```text
 9,554,778 Rows
-dbt Transformation Layer
-Source Configuration
+```
 
-dbt sources were configured against the Snowflake RAW schema.
+---
 
-Model
+# dbt Analytics Layer
 
-Created:
+Created analytics model:
 
+```sql
 DAILY_TAXI_METRICS
+```
 
 Metrics generated:
 
-Trip Date
-Total Trips
-Average Trip Distance
-Average Fare
-Total Revenue
-Example Transformation
+* Trip Date
+* Total Trips
+* Average Trip Distance
+* Average Fare
+* Total Revenue
+
+Example Transformation:
+
+```sql
 SELECT
     CAST(TPEP_PICKUP_DATETIME AS DATE) AS TRIP_DATE,
     COUNT(*) AS TOTAL_TRIPS,
@@ -101,79 +148,116 @@ SELECT
     ROUND(SUM(TOTAL_AMOUNT), 2) AS TOTAL_REVENUE
 FROM RAW_YELLOW_TAXI_TRIPS
 GROUP BY CAST(TPEP_PICKUP_DATETIME AS DATE)
-Power BI Dashboard
+```
 
-The Power BI dashboard provides:
+---
 
-KPI Cards
-Total Trips
-Total Revenue
-Average Fare
-Average Trip Distance
-Trend Analysis
-Daily Revenue Trend
-Daily Trip Trend
-Average Fare Trend
-Average Trip Distance Trend
-Dashboard Preview
-Power BI Dashboard
+# Power BI Dashboard
 
+The dashboard includes:
 
+### KPI Metrics
 
+* Total Trips
+* Total Revenue
+* Average Fare
+* Average Trip Distance
 
-Snowflake Row Count
+### Trend Analysis
 
+* Daily Trips Trend
+* Daily Revenue Trend
+* Average Fare Trend
+* Average Trip Distance Trend
 
+---
 
+# Dashboard Preview
 
-dbt Successful Run
+## Power BI Dashboard
 
+![Power BI Dashboard](phase2/dashboard/screenshots/dashboard.png)
 
+## Snowflake Row Count
 
+![Snowflake Row Count](phase2/dashboard/screenshots/snowflake_row_count.png)
 
-Security Improvements
+## dbt Successful Run
 
-Removed hardcoded credentials from source code.
+![dbt Run](phase2/dashboard/screenshots/dbt_success.png)
 
-Implemented:
+---
 
-Environment Variables
-.env configuration
-dbt env_var() integration
-GitHub secret cleanup
+# Security Improvements
+
+Removed hardcoded Snowflake credentials and implemented environment variable configuration.
 
 Example:
 
+```python
 user=os.getenv("SNOWFLAKE_USER")
 password=os.getenv("SNOWFLAKE_PASSWORD")
 account=os.getenv("SNOWFLAKE_ACCOUNT")
-Data Recovery Using Snowflake Time Travel
+```
+
+Implemented:
+
+* .env configuration
+* python-dotenv
+* dbt env_var()
+* GitHub secret cleanup
+
+---
+
+# Snowflake Time Travel Recovery
 
 During development, an accidental:
 
+```sql
 TRUNCATE TABLE RAW_YELLOW_TAXI_TRIPS;
+```
 
 removed all loaded data.
 
-The table was successfully restored using Snowflake Time Travel and table cloning, recovering:
+The dataset was successfully recovered using Snowflake Time Travel and table cloning, restoring:
 
+```text
 9,554,778 Records
+```
 
-This demonstrated real-world cloud data recovery and operational troubleshooting skills.
+This demonstrates cloud data recovery and operational troubleshooting skills.
 
-Key Results
-Metric	Value
-Records Processed	9,554,778
-Months Loaded	3
-Cloud Warehouse	Snowflake
-Transformation Tool	dbt
-Dashboard Tool	Power BI
-Analytics Rows Generated	96
-Future Improvements
-Prefect Workflow Orchestration
-Automated Data Refresh
-Docker Containerization
-GitHub Actions CI/CD
-Incremental dbt Models
-Snowflake Stages & COPY INTO
-Data Quality Tests
+---
+
+# Results
+
+| Metric                   | Value     |
+| ------------------------ | --------- |
+| Records Processed        | 9,554,778 |
+| Months Loaded            | 3         |
+| Cloud Warehouse          | Snowflake |
+| Transformation Tool      | dbt       |
+| Dashboard Tool           | Power BI  |
+| Analytics Rows Generated | 96        |
+
+---
+
+# Future Enhancements
+
+* Prefect Workflow Orchestration
+* Automated Data Refresh
+* Docker Containerization
+* GitHub Actions CI/CD
+* Incremental dbt Models
+* Data Quality Testing
+
+---
+
+# Author
+
+**Kruthika Kadurhalli Raghu**
+
+Graduate Student – Data Science
+Arizona State University
+
+GitHub: https://github.com/kruthika-kr
